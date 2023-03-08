@@ -1,0 +1,52 @@
+.buttons {
+  margin-top: 11px;
+
+  &__item {
+    padding: 15px;
+    box-sizing: border-box;
+    background: rgb(255, 255, 255);
+    border: 1px solid rgb(223, 229, 236);
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 20px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: rgb(74, 74, 74);
+    cursor: pointer;
+  }
+
+  &__item:first-child {
+    border-radius: 5px 0px 0px 5px;
+  }
+  &__item:last-child {
+    border-radius: 0px 5px 5px 0px;
+  }
+  &__item:hover {
+    padding: 15px;
+    box-sizing: border-box;
+    border: 1px solid transparent;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 20px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    background: rgb(33, 150, 243);
+    color: rgb(255, 255, 255);
+    cursor: default;
+  }
+}
+
+/*padding: 15px;
+    box-sizing: border-box;
+    border: 1px solid transparent;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 20px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    background: rgb(33, 150, 243);
+    color: rgb(255, 255, 255);
+    cursor: default;*/

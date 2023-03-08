@@ -1,0 +1,18 @@
+.show-more__btn {
+  background: rgb(33, 150, 243);
+  border-radius: 5px;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 20px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: rgb(255, 255, 255);
+  padding: 15px 20px;
+  width: 100%;
+  box-sizing: border-box;
+  border: none;
+  -webkit-box-flex: 1;
+  flex-grow: 1;
+  cursor: pointer;
+}
