@@ -1,19 +1,19 @@
 import Aside from "../Aside/Aside";
 import ButtonFilter from "../ButtonFilter/ButtonFilter";
 import TicketList from "../TicketList/TicketList";
-import "./App.scss";
+import classes from "./App.module.scss";
 
 function App() {
   return (
-    <div className="content">
-      <div className="header">
-        <span className="header__container">
+    <div className={classes.content}>
+      <div className={classes.header}>
+        <span className={classes.header__container}>
           <img src="/images/Logo.svg" alt="logo" />
         </span>
       </div>
-      <div className="wrapper">
+      <div className={classes.wrapper}>
         <Aside />
-        <main className="main">
+        <main className={classes.main}>
           <ButtonFilter />
           <TicketList />
         </main>
