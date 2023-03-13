@@ -1,11 +1,54 @@
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Aside from "../Aside/Aside";
 import ButtonFilter from "../ButtonFilter/ButtonFilter";
 import TicketList from "../TicketList/TicketList";
 import classes from "./App.module.scss";
 
 function App() {
+  const dispatch = useDispatch();
+  // useSelector = помогает полуыить текущее состояние, внутрь передается колбек, который принимает текущий стейт
+  // useSelector((state) => state."пишем состоярние редюсера, затем переменную, которую хотим получить");
+  const value = useSelector((state) => state.cashReducer.cash);
+  const customer = useSelector((state) => state.customerReducer.customers);
+
+  const addCash = (p) => {
+    dispatch({ type: "ADD_CASH", payload: p });
+  };
+
+  const addUser = (name) => {
+    const customerData = {
+      name,
+      id: Date.now(),
+    };
+    dispatch({ type: "ADD_USER", payload: customerData });
+  };
+  const deleteUser = (custom) => {
+    dispatch({ type: "DELETE_USER", payload: custom.id });
+    // console.log(custom);
+  };
+
   return (
     <div className={classes.content}>
+      {value}
+      <button type="button" onClick={() => addCash(13)}>
+        Пополнить cash
+      </button>
+      {customer.length > 0 ? (
+        <div>
+          {customer.map((el) => (
+            // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+            <div key={el.id} onClick={() => deleteUser(el)}>
+              {el.name}
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div>Пустой</div>
+      )}
+      <button type="button" onClick={() => addUser(prompt())}>
+        Добавить пользователя
+      </button>
       <div className={classes.header}>
         <span className={classes.header__container}>
           <img src="/images/Logo.svg" alt="logo" />
@@ -23,9 +66,3 @@ function App() {
 }
 
 export default App;
-
-// Как второй класс добавить ? если уже рассказывать так рассказать доконца может
-
-// Можно использовать библиотеку classnames. В своих проектах я так и делаю.
-
-// Например вот так: className={classnames(styles.firstStyle, styles.secondStyle)}

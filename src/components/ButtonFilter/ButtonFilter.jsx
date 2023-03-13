@@ -4,15 +4,15 @@ import classes from "./ButtonFilter.module.scss";
 function ButtonFilter() {
   return (
     <div className={classes.buttons}>
-      <buttons type="button" className={classes.buttons__item}>
+      <button type="button" className={classes.buttons__item}>
         Самый дешевый
-      </buttons>
-      <buttons type="button" className={classes.buttons__item}>
+      </button>
+      <button type="button" className={classes.buttons__item}>
         Самый быстрый
-      </buttons>
-      <buttons type="button" className={classes.buttons__item}>
+      </button>
+      <button type="button" className={classes.buttons__item}>
         Самый оптимальный
-      </buttons>
+      </button>
     </div>
   );
 }
