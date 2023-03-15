@@ -1,38 +1,48 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import classes from "./Aside.module.scss";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleCheck, checkAll } from "../../store/checkSlice";
 
 function Aside() {
+  const [active, setActive] = useState(false);
+  console.log(active);
+  const dispatch = useDispatch();
+  const arrCheck = useSelector((state) => state.checkbox.panel);
+
+  const checkItem = (id) => {
+    dispatch(toggleCheck(id));
+  };
+  const checkAllItems = () => {
+    dispatch(checkAll(!active));
+  };
+
+  useEffect(() => {
+    setActive(arrCheck.every((el) => el.isChecked === true));
+  }, [arrCheck]);
+
   return (
     <aside className={classes.panel}>
       <div className={classes.panel__wrapper}>
         <h3 className={classes.panel__title}>КОЛИЧЕСТВО ПЕРЕСАДОК</h3>
-        <label className={classes.panel__label} htmlFor="All">
+        <label key={4} className={classes.panel__label} htmlFor={4}>
           <span>
-            <input type="checkbox" id="All" />
+            <input onChange={() => checkAllItems()} type="checkbox" id={4} checked={active} />
             Все
           </span>
         </label>
-        <label className={classes.panel__label} htmlFor="Without transfers">
-          <span>
-            <input type="checkbox" id="Without transfers" />
-            Без пересадок
-          </span>
-        </label>
-        <label className={classes.panel__label} htmlFor="one transfer">
-          <span>
-            <input type="checkbox" id="one transfer" />1 пересадка
-          </span>
-        </label>
-        <label className={classes.panel__label} htmlFor="two transfers">
-          <span>
-            <input type="checkbox" id="two transfers" />2 пересадки
-          </span>
-        </label>
-        <label className={classes.panel__label} htmlFor="three transfers">
-          <span>
-            <input type="checkbox" id="three transfers" />3 пересадки
-          </span>
-        </label>
+        {arrCheck.map((el) => (
+          <label key={el.id} className={classes.panel__label} htmlFor={el.id}>
+            <span>
+              <input
+                type="checkbox"
+                onChange={() => checkItem(el.id)}
+                id={el.id}
+                checked={el.isChecked}
+              />
+              {el.label}
+            </span>
+          </label>
+        ))}
       </div>
     </aside>
   );
