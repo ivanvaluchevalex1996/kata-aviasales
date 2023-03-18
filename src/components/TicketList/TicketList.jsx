@@ -1,8 +1,10 @@
 import React from "react";
 import TicketItem from "../TicketItem/TicketItem";
 import classes from "./TicketList.module.scss";
+import { useSelector } from "react-redux";
 
 function TicketList() {
+  const tickets = useSelector((state) => state.tickets.tickets);
   return (
     <div className={classes["all-tickets"]}>
       <TicketItem />

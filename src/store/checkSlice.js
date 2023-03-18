@@ -23,5 +23,4 @@ const checkSlice = createSlice({
 });
 
 export const { toggleCheck, checkAll } = checkSlice.actions;
-
 export default checkSlice.reducer;

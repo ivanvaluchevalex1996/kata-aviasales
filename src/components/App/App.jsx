@@ -1,12 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Aside from "../Aside/Aside";
 import ButtonFilter from "../ButtonFilter/ButtonFilter";
 import TicketList from "../TicketList/TicketList";
 import classes from "./App.module.scss";
+import aviaService from "../../service/service";
+import { fetchTickets } from "../../store/ticketsSlice";
 
 function App() {
   const dispatch = useDispatch();
+  // получаем searchId
+  useEffect(() => {
+    const load = async () => {
+      const data = await aviaService.getSearchId();
+      localStorage.setItem("searchId", data.searchId);
+    };
+
+    load();
+    dispatch(fetchTickets());
+  }, []);
 
   return (
     <div className={classes.content}>
