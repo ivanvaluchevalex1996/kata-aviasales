@@ -18,7 +18,7 @@ function App() {
 
     load();
     dispatch(fetchTickets());
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className={classes.content}>

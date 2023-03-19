@@ -3,7 +3,9 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const fetchTickets = createAsyncThunk("tickets/fetchTickets", async () => {
   const searchId = localStorage.getItem("searchId");
-  const response = await fetch(`https://front-test.dev.aviasales.ru/tickets?searchId=${searchId}`);
+  const response = await fetch(
+    `https://aviasales-test-api.kata.academy/tickets?searchId=${searchId}`
+  );
   const data = await response.json();
   console.log(data);
   return data;
