@@ -1,15 +1,23 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export const fetchTickets = createAsyncThunk("tickets/fetchTickets", async () => {
-  const searchId = localStorage.getItem("searchId");
-  const response = await fetch(
-    `https://aviasales-test-api.kata.academy/tickets?searchId=${searchId}`
-  );
-  const data = await response.json();
-  console.log(data);
-  return data;
-});
+export const fetchTickets = createAsyncThunk(
+  "tickets/fetchTickets",
+  async (_, { rejectWithValue }) => {
+    const searchId = localStorage.getItem("searchId");
+    try {
+      const response = await fetch(
+        `https://aviasales-test-api.kata.academy/tickets?searchId=${searchId}`
+      );
+      if (!response.ok) throw new Error("Error");
+      const data = await response.json();
+      console.log(data);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 const ticketsSlice = createSlice({
   name: "tickets",
@@ -31,7 +39,10 @@ const ticketsSlice = createSlice({
       state.status = "resolved";
       state.tickets = action.payload;
     },
-    [fetchTickets.rejected]: (state, action) => {},
+    [fetchTickets.rejected]: (state, action) => {
+      state.status = "rejected";
+      state.error = action.payload;
+    },
   },
 });
 

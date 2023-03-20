@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 
 function TicketList() {
   const tickets = useSelector((state) => state.tickets.tickets.tickets);
-  console.log(tickets);
+  // console.log(tickets);
   // чтобы пропустить undefined использую опциональную ц-ку
   const elem = tickets?.map((item, i) => (
     <TicketItem

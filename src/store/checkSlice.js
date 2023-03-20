@@ -4,10 +4,10 @@ const checkSlice = createSlice({
   name: "checkbox",
   initialState: {
     panel: [
-      { label: "Без пересадок", id: 0, isChecked: false },
-      { label: "1 пересадка", id: 1, isChecked: false },
-      { label: "2 пересадка", id: 2, isChecked: false },
-      { label: "3 пересадка", id: 3, isChecked: false },
+      { label: "Без пересадок", id: 0, isChecked: true },
+      { label: "1 пересадка", id: 1, isChecked: true },
+      { label: "2 пересадка", id: 2, isChecked: true },
+      { label: "3 пересадка", id: 3, isChecked: true },
     ],
   },
   reducers: {

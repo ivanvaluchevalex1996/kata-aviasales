@@ -9,6 +9,8 @@ import { fetchTickets } from "../../store/ticketsSlice";
 
 function App() {
   const dispatch = useDispatch();
+  const { status, error } = useSelector((state) => state.tickets);
+  console.log(status);
   // получаем searchId
   useEffect(() => {
     const load = async () => {

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toggleCheck, checkAll } from "../../store/checkSlice";
 
 function Aside() {
-  const [active, setActive] = useState(false);
+  const [active, setActive] = useState(true);
   const dispatch = useDispatch();
   const arrCheck = useSelector((state) => state.checkbox.panel);
 
@@ -14,7 +14,7 @@ function Aside() {
   const checkAllItems = () => {
     dispatch(checkAll(!active));
   };
-  // когда все 4 чекбокса будут тру, active тожде станет тру, и чекбокс все станет активным
+  // когда все 4 чекбокса будут тру, active тоже станет тру, и чекбокс все станет активным
   useEffect(() => {
     setActive(arrCheck.every((el) => el.isChecked === true));
   }, [arrCheck]);
