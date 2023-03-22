@@ -1,16 +1,16 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Aside from "../Aside/Aside";
-import ButtonFilter from "../ButtonFilter/ButtonFilter";
-import TicketList from "../TicketList/TicketList";
 import classes from "./App.module.scss";
 import aviaService from "../../service/service";
 import { fetchTickets } from "../../store/ticketsSlice";
+import Main from "../Main/Main";
+import Header from "../Header/Header";
 
 function App() {
   const dispatch = useDispatch();
   const { status, error } = useSelector((state) => state.tickets);
-  console.log(status);
+  // console.log(status);
   // получаем searchId
   useEffect(() => {
     const load = async () => {
@@ -24,17 +24,12 @@ function App() {
 
   return (
     <div className={classes.content}>
-      <div className={classes.header}>
-        <span className={classes.header__container}>
-          <img src="/images/Logo.svg" alt="logo" />
-        </span>
-      </div>
+      <Header />
       <div className={classes.wrapper}>
         <Aside />
-        <main className={classes.main}>
-          <ButtonFilter />
-          <TicketList />
-        </main>
+        {/* {status === "loading" && <h2>loading</h2>}
+        {error && <h2>error</h2>} */}
+        <Main />
       </div>
     </div>
   );

@@ -5,8 +5,8 @@ import classes from "./TicketList.module.scss";
 import { useSelector } from "react-redux";
 
 function TicketList() {
+  // const tickets = useSelector((state) => state.tickets.tickets.tickets);
   const tickets = useSelector((state) => state.tickets.tickets.tickets);
-  // console.log(tickets);
   // чтобы пропустить undefined использую опциональную ц-ку
   const elem = tickets?.map((item, i) => (
     <TicketItem
@@ -21,6 +21,7 @@ function TicketList() {
       stopsObratno={item.segments[1].stops}
     />
   ));
+
   return (
     <div className={classes["all-tickets"]}>
       {elem}
