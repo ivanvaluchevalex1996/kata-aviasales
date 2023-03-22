@@ -1,69 +1,50 @@
-// import React, { useState } from "react";
-// import classes from "./TabsSort.module.scss";
-// import { useDispatch, useSelector } from "react-redux";
-// import { sortTicketByPrice } from "../../store/ticketsSlice";
-
-// function TabsSort() {
-//   const [activeButton, setActiveButton] = useState("");
-//   const dispatch = useDispatch();
-//   // const arrTickets = useSelector((state) => state.tickets.tickets.tickets);
-//   const buttons = useSelector((state) => state.tickets.buttons);
-
-//   const btn = buttons.map(({ name, label }) => (
-//     <button
-//       className={classes.buttons__item}
-//       type="button"
-//       key={name}
-//       onClick={() => {
-//         dispatch(sortTicketByPrice());
-//       }}
-//     >
-//       {label}
-//     </button>
-//   ));
-
-//   return <div className={classes.buttons}>{btn}</div>;
-// }
-
-// export default TabsSort;
+/* eslint-disable no-unused-expressions */
 import React, { useState } from "react";
 import classes from "./TabsSort.module.scss";
-import { sortTicketByPrice } from "../../store/ticketsSlice";
+import { sortTicketByPrice, sortTicketByCheap } from "../../store/ticketsSlice";
 import { useDispatch } from "react-redux";
 
 function TabsSort() {
+  const [cheapTabActive, setCheapTabActive] = useState(false);
+  const [fastTabActive, setFastTabActive] = useState(false);
   const dispatch = useDispatch();
-  const [activeButton, setActiveButton] = useState("");
 
-  const btn = [
-    { label: "Самый дешевый", name: "cheap" },
-    { label: "Самый быстрый", name: "fast" },
-  ];
+  let classCheap = classes.buttons__item;
+  if (cheapTabActive) {
+    classCheap = classes["buttons__item--active"];
+  } else classCheap = classes.buttons__item;
 
-  const onSortChange = (name) => {
-    setActiveButton(name);
-  };
+  let classFast = classes.buttons__item;
+  if (fastTabActive) {
+    classFast = classes["buttons__item--active"];
+  } else classFast = classes.buttons__item;
 
-  const buttons = btn.map(({ name, label }) => {
-    const isActive = activeButton === name;
-    const clazz = isActive ? classes.buttons__itemActive : classes.buttons__item;
-
-    return (
+  return (
+    <div className={classes.buttons}>
       <button
-        className={`${clazz}`}
         type="button"
-        key={name}
+        className={classCheap}
         onClick={() => {
-          onSortChange(name);
+          setFastTabActive(false);
+          setCheapTabActive(true);
           dispatch(sortTicketByPrice());
         }}
       >
-        {label}
+        Самый дешевый
       </button>
-    );
-  });
-
-  return <div className={classes.buttons}>{buttons}</div>;
+      <button
+        type="button"
+        className={classFast}
+        onClick={() => {
+          setCheapTabActive(false);
+          setFastTabActive(true);
+          dispatch(sortTicketByCheap());
+        }}
+      >
+        Самый быстрый
+      </button>
+    </div>
+  );
 }
 
 export default TabsSort;

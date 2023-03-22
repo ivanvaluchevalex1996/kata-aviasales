@@ -1,24 +1,46 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
 
-export const fetchTickets = createAsyncThunk(
-  "tickets/fetchTickets",
-  async (_, { rejectWithValue }) => {
-    const searchId = localStorage.getItem("searchId");
-    try {
-      const response = await fetch(
-        `https://aviasales-test-api.kata.academy/tickets?searchId=${searchId}`
-      );
-      // console.log(response);
-      if (!response.ok) throw new Error("Error");
-      const data = await response.json();
-      // console.log(data);
-      return data;
-    } catch (error) {
-      return rejectWithValue(error.message);
+const getTickets = async () => {
+  const ticketsResult = [];
+  const searchId = localStorage.getItem("searchId");
+  try {
+    const ticketsResponse = await fetch(
+      `https://aviasales-test-api.kata.academy/tickets?searchId=${searchId}`
+    );
+    const { tickets, stop } = await ticketsResponse.json();
+    ticketsResult.push(...tickets);
+    if (!stop) {
+      ticketsResult.push(...(await getTickets()));
+    }
+  } catch (e) {
+    if (e.name === "SyntaxError") {
+      ticketsResult.push(...(await getTickets()));
     }
   }
-);
+  console.log(ticketsResult);
+  return ticketsResult;
+};
+export const fetchTickets = createAsyncThunk("tickets/fetchTickets", getTickets);
+
+// export const fetchTickets = createAsyncThunk(
+//   "tickets/fetchTickets",
+//   async (_, { rejectWithValue }) => {
+//     const searchId = localStorage.getItem("searchId");
+//     try {
+//       const response = await fetch(
+//         `https://aviasales-test-api.kata.academy/tickets?searchId=${searchId}`
+//       );
+//       if (!response.ok) throw new Error("Error");
+//       const data = await response.json();
+//       console.log(data);
+//       return data;
+//     } catch (error) {
+//       return rejectWithValue(error.message);
+//     }
+//   }
+// );
+
 const ticketsSlice = createSlice({
   name: "tickets",
   initialState: {
@@ -29,17 +51,26 @@ const ticketsSlice = createSlice({
     // ],
     status: null,
     error: null,
+    addTickets: 5,
   },
   reducers: {
     sortTicketByPrice(state) {
-      const filterTickets = current(state.tickets.tickets).slice();
-      state.tickets.tickets = filterTickets.sort((previous, next) =>
+      const filterTickets = current(state.tickets).slice();
+      state.tickets = filterTickets.sort((previous, next) =>
         previous.price > next.price ? 1 : -1
       );
     },
+    sortTicketByCheap(state) {
+      const filterTickets = current(state.tickets).slice();
+      state.tickets = filterTickets.sort((previous, next) =>
+        previous.segments[0]?.duration > next.segments[0]?.duration ? 1 : -1
+      );
+    },
+    // durationObratno={item.segments[1]?.duration}
 
-    // clickFast(state, action) {},
-    // toggleCheck(state, action) {},
+    showMore(state) {
+      state.addTickets += 5;
+    },
   },
   extraReducers: {
     [fetchTickets.pending]: (state) => {
@@ -57,5 +88,5 @@ const ticketsSlice = createSlice({
   },
 });
 
-export const { sortTicketByPrice } = ticketsSlice.actions;
+export const { sortTicketByPrice, sortTicketByCheap, showMore } = ticketsSlice.actions;
 export default ticketsSlice.reducer;

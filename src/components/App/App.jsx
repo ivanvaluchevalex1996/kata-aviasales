@@ -22,13 +22,16 @@ function App() {
     dispatch(fetchTickets());
   }, [dispatch]);
 
+  const loading = status === "loading" && <h2>loading</h2>;
+
   return (
     <div className={classes.content}>
       <Header />
       <div className={classes.wrapper}>
         <Aside />
-        {/* {status === "loading" && <h2>loading</h2>}
-        {error && <h2>error</h2>} */}
+        {loading}
+        {/* {status === "loading" && <h2>loading</h2>} */}
+        {/* {error && <h2>error</h2>} */}
         <Main />
       </div>
     </div>
