@@ -13,6 +13,7 @@ class ServiseDB {
     return body;
   }
 
+  // получение id по которому получаем билеты
   async getSearchId() {
     return this.getResource(`${this.baseUrl}/search`);
   }

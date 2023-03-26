@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Aside from "../Aside/Aside";
 import classes from "./App.module.scss";
@@ -6,104 +6,41 @@ import aviaService from "../../service/service";
 import { fetchTickets } from "../../store/ticketsSlice";
 import Main from "../Main/Main";
 import Header from "../Header/Header";
+import { Alert } from "antd";
 
 function App() {
   const dispatch = useDispatch();
-  const { status, error } = useSelector((state) => state.tickets);
-  // console.log(status);
+  const { error } = useSelector((state) => state.tickets);
+  const checkbox = useSelector((state) => state.tickets.panel);
+
   // получаем searchId
   useEffect(() => {
     const load = async () => {
       const data = await aviaService.getSearchId();
       localStorage.setItem("searchId", data.searchId);
+      dispatch(fetchTickets());
     };
-
     load();
-    dispatch(fetchTickets());
-  }, [dispatch]);
+  }, []);
 
-  const loading = status === "loading" && <h2>loading</h2>;
-
-  return (
+  const content = (
     <div className={classes.content}>
       <Header />
       <div className={classes.wrapper}>
         <Aside />
-        {loading}
-        {/* {status === "loading" && <h2>loading</h2>} */}
-        {/* {error && <h2>error</h2>} */}
-        <Main />
+        {checkbox.every((el) => !el.isChecked) === false ? <Main /> : <h1>Мы ничего не нашли</h1>}
       </div>
     </div>
   );
+  const mistake = (
+    <Alert
+      message="Поиск не дал результатов. Попробуйте перезагрузить страницу."
+      type="error"
+      showIcon
+    />
+  );
+
+  return <div>{error ? mistake : content}</div>;
 }
 
 export default App;
-// import React from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import Aside from "../Aside/Aside";
-// import ButtonFilter from "../ButtonFilter/ButtonFilter";
-// import TicketList from "../TicketList/TicketList";
-// import classes from "./App.module.scss";
-
-// function App() {
-//   const dispatch = useDispatch();
-//   // useSelector = помогает полуыить текущее состояние, внутрь передается колбек, который принимает текущий стейт
-//   // useSelector((state) => state."пишем состоярние редюсера, затем переменную, которую хотим получить");
-//   const value = useSelector((state) => state.cashReducer.cash);
-//   const customer = useSelector((state) => state.customerReducer.customers);
-
-//   const addCash = (p) => {
-//     dispatch({ type: "ADD_CASH", payload: p });
-//   };
-
-// const addUser = (name) => {
-//   const customerData = {
-//     name,
-//     id: Date.now(),
-//   };
-//   dispatch({ type: "ADD_USER", payload: customerData });
-// };
-//   const deleteUser = (custom) => {
-//     dispatch({ type: "DELETE_USER", payload: custom.id });
-//     // console.log(custom);
-//   };
-
-//   return (
-// <div className={classes.content}>
-//   {value}
-//   <button type="button" onClick={() => addCash(13)}>
-//     Пополнить cash
-//   </button>
-// {customer.length > 0 ? (
-//   <div>
-//     {customer.map((el) => (
-//       // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-//       <div key={el.id} onClick={() => deleteUser(el)}>
-//         {el.name}
-//       </div>
-//     ))}
-//   </div>
-// ) : (
-//   <div>Пустой</div>
-// )}
-// <button type="button" onClick={() => addUser(prompt())}>
-//   Добавить пользователя
-// </button>
-//   <div className={classes.header}>
-//     <span className={classes.header__container}>
-//       <img src="/images/Logo.svg" alt="logo" />
-//     </span>
-//   </div>
-//   <div className={classes.wrapper}>
-//     <Aside />
-//     <main className={classes.main}>
-//       <ButtonFilter />
-//       <TicketList />
-//     </main>
-//   </div>
-// </div>
-//   );
-// }
-
-// export default App;

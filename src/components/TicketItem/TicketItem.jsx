@@ -1,6 +1,5 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable react/jsx-curly-brace-presence */
-import React from "react";
 import classes from "./TicketItem.module.scss";
 import { getTimeFromMins, convertDate } from "../../utils/getTimeFromMins";
 import wordOfNum from "../../utils/wordOfNumber";
@@ -17,11 +16,13 @@ function TicketItem(props) {
     stopsObratno,
   } = props;
 
+  const baseUrl = "https://pics.avs.io/99/36/";
+
   return (
     <div className={classes.ticket}>
       <div className={classes.ticket__header}>
         <span className={classes.ticket__span}>{price} Р</span>
-        <img src={`https://pics.avs.io/99/36/${img}.png`} alt="logo" />
+        <img src={img ? `${baseUrl}${img}.png` : null} alt="logo" />
       </div>
       <div className={classes.ticket__content}>
         <div className={classes.ticket__wrapper}>

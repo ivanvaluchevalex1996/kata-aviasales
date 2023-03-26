@@ -8,5 +8,25 @@ body {
 }
 
 body {
-  background-color: cadetblue;
+  background-color: #a3c7e2;
+}
+
+.ant-spin-spinning {
+  position: absolute;
+  top: 40%;
+  left: 42%;
+  display: inline-block;
+}
+
+.ant-tabs-content-holder {
+  width: 100%;
+}
+
+.ant-spin-text {
+  font-size: 22px;
+  color: #2196f3;
+}
+
+.ant-alert-error {
+  background-color: #ffcec7;
 }

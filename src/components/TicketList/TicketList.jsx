@@ -1,23 +1,32 @@
 /* eslint-disable react/no-array-index-key */
-import React from "react";
+import { useEffect, useState } from "react";
 import TicketItem from "../TicketItem/TicketItem";
 import classes from "./TicketList.module.scss";
 import { useSelector, useDispatch } from "react-redux";
 import { showMore } from "../../store/ticketsSlice";
 import generateKey from "../../utils/uniqueKey";
+import PropTypes from "prop-types";
 
 function TicketList() {
-  // const tickets = useSelector((state) => state.tickets.tickets.tickets);
+  const [filteredTickets, setFilteredTickets] = useState([]);
   const tickets = useSelector((state) => state.tickets.tickets);
   const itemsPerPage = useSelector((state) => state.tickets.addTickets);
+  const checkbox = useSelector((state) => state.tickets.panel);
   const dispatch = useDispatch();
   const handleShowMore = () => {
     dispatch(showMore());
   };
-  // console.log(tickets);
-  const visibleTickets = tickets?.slice(0, itemsPerPage);
 
-  // чтобы пропустить undefined использую опциональную ц-ку
+  const visibleTickets = filteredTickets?.slice(0, itemsPerPage);
+
+  useEffect(() => {
+    const activeFilters = checkbox.filter((el) => el.isChecked);
+    const variable = tickets.filter((el) => {
+      const data = el.segments[0].stops.length;
+      return activeFilters.some((elem) => elem.stopsCount === data);
+    });
+    setFilteredTickets(variable);
+  }, [checkbox, tickets]);
 
   const elem = visibleTickets?.map((item) => (
     <TicketItem
@@ -32,6 +41,7 @@ function TicketList() {
       stopsObratno={item.segments[1].stops}
     />
   ));
+  console.log(checkbox);
   return (
     <div className={classes["all-tickets"]}>
       {elem}

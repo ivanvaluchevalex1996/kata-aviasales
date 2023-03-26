@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-expressions */
-import React, { useState } from "react";
+import { useState } from "react";
 import classes from "./TabsSort.module.scss";
 import { sortTicketByPrice, sortTicketByCheap } from "../../store/ticketsSlice";
 import { useDispatch } from "react-redux";
@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 function TabsSort() {
   const [cheapTabActive, setCheapTabActive] = useState(false);
   const [fastTabActive, setFastTabActive] = useState(false);
+
   const dispatch = useDispatch();
 
   let classCheap = classes.buttons__item;

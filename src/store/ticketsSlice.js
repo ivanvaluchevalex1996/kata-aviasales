@@ -1,73 +1,85 @@
 /* eslint-disable no-param-reassign */
-import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, current, createAction } from "@reduxjs/toolkit";
+import { orderBy, maxBy } from "lodash";
 
-const getTickets = async () => {
-  const ticketsResult = [];
+// фуникция получения билетов
+async function getTickets() {
   const searchId = localStorage.getItem("searchId");
-  try {
-    const ticketsResponse = await fetch(
-      `https://aviasales-test-api.kata.academy/tickets?searchId=${searchId}`
-    );
-    const { tickets, stop } = await ticketsResponse.json();
-    ticketsResult.push(...tickets);
-    if (!stop) {
-      ticketsResult.push(...(await getTickets()));
-    }
-  } catch (e) {
-    if (e.name === "SyntaxError") {
-      ticketsResult.push(...(await getTickets()));
+  const res = await fetch(`https://aviasales-test-api.kata.academy/tickets?searchId=${searchId}`);
+  if (!res.ok) {
+    throw new Error("Fetch error");
+  }
+
+  return res.json();
+}
+
+const addTicketsArr = createAction("tickets/addTicketsArr");
+
+export const fetchTickets = createAsyncThunk(
+  "tickets/fetchTickets",
+  // eslint-disable-next-line consistent-return
+  async (_, { dispatch, rejectWithValue }) => {
+    let stop = false;
+    let count = 0;
+    while (!stop) {
+      try {
+        // eslint-disable-next-line no-await-in-loop
+        const data = await getTickets();
+        dispatch(addTicketsArr(data.tickets));
+        // если на сервере ошибка, чтобы не уйти в бесконечную загрузку билетов
+        stop = data.stop;
+        count = 0;
+      } catch (e) {
+        count++;
+        if (count > 3) {
+          return rejectWithValue(e.message);
+        }
+      }
     }
   }
-  console.log(ticketsResult);
-  return ticketsResult;
-};
-export const fetchTickets = createAsyncThunk("tickets/fetchTickets", getTickets);
-
-// export const fetchTickets = createAsyncThunk(
-//   "tickets/fetchTickets",
-//   async (_, { rejectWithValue }) => {
-//     const searchId = localStorage.getItem("searchId");
-//     try {
-//       const response = await fetch(
-//         `https://aviasales-test-api.kata.academy/tickets?searchId=${searchId}`
-//       );
-//       if (!response.ok) throw new Error("Error");
-//       const data = await response.json();
-//       console.log(data);
-//       return data;
-//     } catch (error) {
-//       return rejectWithValue(error.message);
-//     }
-//   }
-// );
+);
 
 const ticketsSlice = createSlice({
   name: "tickets",
   initialState: {
     tickets: [],
-    // buttons: [
-    //   { label: "Самый дешевый", name: "cheap", active: false },
-    //   { label: "Самый быстрый", name: "fast", active: false },
-    // ],
+    panel: [
+      { label: "Без пересадок", id: 0, isChecked: true, stopsCount: 0 },
+      { label: "1 пересадка", id: 1, isChecked: true, stopsCount: 1 },
+      { label: "2 пересадка", id: 2, isChecked: true, stopsCount: 2 },
+      { label: "3 пересадка", id: 3, isChecked: true, stopsCount: 3 },
+    ],
     status: null,
     error: null,
     addTickets: 5,
   },
-  reducers: {
-    sortTicketByPrice(state) {
-      const filterTickets = current(state.tickets).slice();
-      state.tickets = filterTickets.sort((previous, next) =>
-        previous.price > next.price ? 1 : -1
-      );
-    },
-    sortTicketByCheap(state) {
-      const filterTickets = current(state.tickets).slice();
-      state.tickets = filterTickets.sort((previous, next) =>
-        previous.segments[0]?.duration > next.segments[0]?.duration ? 1 : -1
-      );
-    },
-    // durationObratno={item.segments[1]?.duration}
 
+  reducers: {
+    // сортировка по цене
+    sortTicketByPrice(state) {
+      const sortTickets = current(state.tickets).slice();
+      state.tickets = orderBy(sortTickets, ["price"], ["asc"]);
+    },
+    // сортировка по скорости
+    sortTicketByCheap(state) {
+      const sortTickets = current(state.tickets).slice();
+      state.tickets = orderBy(
+        sortTickets,
+        (item) => maxBy(item.segments, "duration").duration,
+        "asc"
+      );
+    },
+    // кнопка, выбрать все фильтры
+    checkAll(state, action) {
+      // eslint-disable-next-line no-param-reassign
+      state.panel = state.panel.map((el) => ({ ...el, isChecked: action.payload }));
+    },
+    // смена галочки на фильтре
+    toggleCheck(state, action) {
+      const toggledCheck = state.panel.find((check) => check.id === action.payload);
+      toggledCheck.isChecked = !toggledCheck.isChecked;
+    },
+    // показать еще 5 карточек
     showMore(state) {
       state.addTickets += 5;
     },
@@ -77,16 +89,19 @@ const ticketsSlice = createSlice({
       state.status = "loading";
       state.error = null;
     },
-    [fetchTickets.fulfilled]: (state, action) => {
+    [fetchTickets.fulfilled]: (state) => {
       state.status = "resolved";
-      state.tickets = action.payload;
     },
     [fetchTickets.rejected]: (state, action) => {
       state.status = "rejected";
       state.error = action.payload;
     },
+    [addTicketsArr]: (state, action) => {
+      state.tickets = state.tickets.concat(action.payload);
+    },
   },
 });
 
-export const { sortTicketByPrice, sortTicketByCheap, showMore } = ticketsSlice.actions;
+export const { sortTicketByPrice, sortTicketByCheap, showMore, checkAll, toggleCheck } =
+  ticketsSlice.actions;
 export default ticketsSlice.reducer;
