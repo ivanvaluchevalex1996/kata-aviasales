@@ -3,6 +3,7 @@
 import classes from "./TicketItem.module.scss";
 import { getTimeFromMins, convertDate } from "../../utils/getTimeFromMins";
 import wordOfNum from "../../utils/wordOfNumber";
+import PropTypes from "prop-types";
 
 function TicketItem(props) {
   const {
@@ -57,3 +58,18 @@ function TicketItem(props) {
 }
 
 export default TicketItem;
+
+TicketItem.propTypes = {
+  price: PropTypes.number.isRequired,
+  img: PropTypes.string,
+  durationTuda: PropTypes.number.isRequired,
+  durationObratno: PropTypes.number.isRequired,
+  dateTuda: PropTypes.string.isRequired,
+  dateObratno: PropTypes.string.isRequired,
+  stopsTuda: PropTypes.arrayOf(PropTypes.string).isRequired,
+  stopsObratno: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
+
+TicketItem.defaultProps = {
+  img: null,
+};

@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import classes from "./Aside.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleCheck, checkAll } from "../../store/ticketsSlice";
-import PropTypes from "prop-types";
 
 function Aside() {
   const [active, setActive] = useState(true);

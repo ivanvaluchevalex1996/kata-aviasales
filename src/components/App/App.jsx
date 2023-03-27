@@ -7,6 +7,7 @@ import { fetchTickets } from "../../store/ticketsSlice";
 import Main from "../Main/Main";
 import Header from "../Header/Header";
 import { Alert } from "antd";
+import PropTypes from "prop-types";
 
 function App() {
   const dispatch = useDispatch();

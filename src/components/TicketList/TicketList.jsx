@@ -5,7 +5,6 @@ import classes from "./TicketList.module.scss";
 import { useSelector, useDispatch } from "react-redux";
 import { showMore } from "../../store/ticketsSlice";
 import generateKey from "../../utils/uniqueKey";
-import PropTypes from "prop-types";
 
 function TicketList() {
   const [filteredTickets, setFilteredTickets] = useState([]);
@@ -41,7 +40,6 @@ function TicketList() {
       stopsObratno={item.segments[1].stops}
     />
   ));
-  console.log(checkbox);
   return (
     <div className={classes["all-tickets"]}>
       {elem}
