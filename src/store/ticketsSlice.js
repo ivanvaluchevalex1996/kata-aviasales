@@ -83,6 +83,9 @@ const ticketsSlice = createSlice({
     showMore(state) {
       state.addTickets += 5;
     },
+    addTicketsArr(state, action) {
+      state.tickets = state.tickets.concat(action.payload);
+    },
   },
   extraReducers: {
     [fetchTickets.pending]: (state) => {
@@ -95,9 +98,6 @@ const ticketsSlice = createSlice({
     [fetchTickets.rejected]: (state, action) => {
       state.status = "rejected";
       state.error = action.payload;
-    },
-    [addTicketsArr]: (state, action) => {
-      state.tickets = state.tickets.concat(action.payload);
     },
   },
 });

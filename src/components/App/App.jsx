@@ -7,13 +7,12 @@ import { fetchTickets } from "../../store/ticketsSlice";
 import Main from "../Main/Main";
 import Header from "../Header/Header";
 import { Alert } from "antd";
-import PropTypes from "prop-types";
 
 function App() {
   const dispatch = useDispatch();
   const { error } = useSelector((state) => state.tickets);
   const checkbox = useSelector((state) => state.tickets.panel);
-
+  console.log(error);
   // получаем searchId
   useEffect(() => {
     const load = async () => {
@@ -29,7 +28,7 @@ function App() {
       <Header />
       <div className={classes.wrapper}>
         <Aside />
-        {checkbox.every((el) => !el.isChecked) === false ? <Main /> : <h1>Мы ничего не нашли</h1>}
+        {checkbox.every((el) => !el.isChecked) === false ? <Main /> : <h1> Мы ничего не нашли</h1>}
       </div>
     </div>
   );
