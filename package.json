@@ -73,5 +73,18 @@
       "npm run lint",
       "prettier --write"
     ]
-  }
+  },
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ivanvaluchevalex1996/kata-aviasales.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ivanvaluchevalex1996/kata-aviasales/issues"
+  },
+  "homepage": "https://github.com/ivanvaluchevalex1996/kata-aviasales#readme",
+  "description": ""
 }
